@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): { msg: string } {
-    return { msg: 'Hello World!' };
+    return {
+      msg: 'Hello World! from Nest.js with "Express.js" engine'
+    };
   }
 }

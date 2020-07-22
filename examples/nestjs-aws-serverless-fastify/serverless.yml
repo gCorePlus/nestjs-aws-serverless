@@ -1,9 +1,9 @@
-service: nestjs-aws-lambda-fastify
+service: nestjs-aws-serverless-fastify
 
 provider:
   name: aws
   runtime: nodejs12.x
-  project: nestjs-aws-lambda-fastify
+  project: nestjs-aws-serverless-fastify
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   apiName: ${self:provider.project}-${self:provider.stage}
@@ -47,7 +47,7 @@ custom:
 functions:
   hello-world:
     name: ${self:custom.prefix-name}
-    handler: dist/test/nestjs-aws-lambda-fastify/src/main-aws.handler
+    handler: dist/test/nestjs-aws-serverless-fastify/src/main-aws.handler
     timeout: 30
     layers:
       - {Ref: GeneralNodeModulesLambdaLayer}

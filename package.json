@@ -1,5 +1,5 @@
 {
-  "name": "@gcoreplus/nestjs-aws-lambda",
+  "name": "@gcoreplus/nestjs-aws-serverless",
   "version": "1.0.0",
   "description": "Provides default handler for nestjs on lambda",
   "author": "Rennan Stefan Boni",
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gCorePlus/nestjs-aws-lambda-boot.git"
+    "url": "git+https://github.com/gCorePlus/nestjs-aws-serverless.git"
   },
   "contributors": [
     {

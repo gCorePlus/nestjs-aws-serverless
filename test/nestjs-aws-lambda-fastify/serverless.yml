@@ -1,0 +1,63 @@
+service: nestjs-aws-lambda-fastify
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  project: nestjs-aws-lambda-fastify
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  apiName: ${self:provider.project}-${self:provider.stage}
+  memorySize: 128
+  environment:
+    NODE_ENV: ${self:provider.stage}
+
+plugins:
+  - serverless-plugin-layer-manager
+
+package:
+  individually: true
+  excludeDevDependencies: false
+  exclude:
+    - '.*/**'
+    - '*'
+    - apps/**
+    - coverage/**
+    - layers/**
+    - libs/**
+    - node_modules/**
+    - src/**
+    - test/**
+
+layers:
+  GeneralNodeModules:
+    path: ./layers/general
+    name: ${self:custom.prefix-name}-node-modules-general
+    description: 'General shared node modules'
+    compatibleRuntimes:
+      - nodejs10.x
+      - nodejs12.x
+
+custom:
+  prefix-name: ${self:service}-${self:provider.stage}
+  layerConfig:
+    installLayers: true
+    exportLayers: true
+    upgradeLayerReferences: true
+
+functions:
+  hello-world:
+    name: ${self:custom.prefix-name}
+    handler: dist/test/nestjs-aws-lambda-fastify/src/main-aws.handler
+    timeout: 30
+    layers:
+      - {Ref: GeneralNodeModulesLambdaLayer}
+    events:
+      - http:
+          path: /
+          method: get
+    package:
+      include:
+        - dist/**
+    tags:
+      project: ${self:provider.project}
+      environment: ${self:provider.stage}

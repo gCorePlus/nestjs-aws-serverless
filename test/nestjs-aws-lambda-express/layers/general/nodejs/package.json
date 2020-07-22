@@ -1,0 +1,13 @@
+{
+  "name": "general-layer",
+  "version": "1.0.0",
+  "dependencies": {
+    "@nestjs/common": "^7.3.2",
+    "@nestjs/core": "^7.3.2",
+    "@nestjs/platform-express": "^7.3.2",
+    "aws-serverless-express": "^3.3.8",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^6.6.0"
+  }
+}

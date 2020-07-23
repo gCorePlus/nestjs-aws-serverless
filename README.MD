@@ -56,7 +56,7 @@ export const handler = lambda(AppModule, {engine: 'fastify'});
 
 Deploy your app on AWS Lambda with [serverless](https://github.com/serverless/serverless) or setup manually pointing to `main-aws.ts` as `main-aws.handler`
 
-see example from [express](https://github.com/gCorePlus/nestjs-aws-serverless/examples/nestjs-aws-serverless-express/serverless.yml) or [fastify](https://github.com/gCorePlus/nestjs-aws-serverless/examples/nestjs-aws-serverless-fastify/serverless.yml)
+see example from [express](https://github.com/gCorePlus/nestjs-aws-serverless/blob/master/examples/nestjs-aws-serverless-express/serverless.yml) or [fastify](https://github.com/gCorePlus/nestjs-aws-serverless/blob/master/examples/nestjs-aws-serverless-fastify/serverless.yml)
 ```yaml
 ...
 functions:

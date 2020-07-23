@@ -3,8 +3,6 @@ import { ProxyResult } from 'aws-serverless-express';
 import { INestApplication } from '@nestjs/common';
 import * as http from 'http';
 
-let cachedApp: INestApplication;
-
 export interface Options {
   engine: 'express' | 'fastify',
   warmup?: {
@@ -16,44 +14,45 @@ export interface Options {
   },
 }
 
-const bootstrap = async (module: any, opts?: Options): Promise<any> => {
+const bootstrap = async (module: any, opts: Options): Promise<any> => {
   const { NestFactory } = await import('@nestjs/core');
 
-  if (opts?.engine === 'express') {
-    let app = await NestFactory.create<INestApplication>(module);
-    await app.init();
-
-    return app;
-  } else if (opts?.engine === 'fastify') {
+  if (opts.engine === 'fastify') {
     const { FastifyAdapter } = await import('@nestjs/platform-fastify');
 
-    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts?.fastify?.options));
+    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options));
     await app.init();
 
     const instance = app.getHttpAdapter().getInstance();
     await instance.ready();
 
     return app;
+  } else { // Default Express
+    let app = await NestFactory.create<INestApplication>(module);
+    await app.init();
+
+    return app;
   }
 };
 
-const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatewayProxyEvent, context: Context, opts?: Options): Promise<APIGatewayProxyResult | http.Server | ProxyResult> => {
-  if  (opts?.engine === 'fastify') {
+const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatewayProxyEvent, context: Context, opts: Options): Promise<APIGatewayProxyResult | http.Server | ProxyResult> => {
+  if  (opts.engine === 'fastify') {
     const { proxy } = await import('aws-serverless-fastify');
-    return await proxy(app.getHttpAdapter().getInstance(), event, context, opts?.fastify?.binaryTypes || []);
-  } else {
+    return await proxy(app.getHttpAdapter().getInstance(), event, context, opts.fastify?.binaryTypes || []);
+  } else { // Default Express
     const { proxy, createServer } = await import('aws-serverless-express');
     return proxy(createServer(app.getHttpAdapter().getInstance()), event, context, 'PROMISE').promise;
   }
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const lambda = (module: any, opts?: Options): Handler => {
-  opts = opts ? opts : { engine: 'express' };
+export const lambda = (module: any, options?: Options): Handler => {
+  const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'} };
   if (opts.fastify) {
     opts.fastify.binaryTypes = opts.fastify.binaryTypes || [];
   }
 
+  let cachedApp: INestApplication;
   return async (event: APIGatewayProxyEvent & SQSEvent & EventBridgeEvent<string, void>, context: Context): Promise<APIGatewayProxyResult | http.Server | ProxyResult | string | undefined> => {
     try {
       // Immediate response for WarmUp plugin

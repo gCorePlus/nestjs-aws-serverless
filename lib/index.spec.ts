@@ -16,6 +16,10 @@ export class HelloWorldController {
 export class HelloWorldModule {
 }
 
+const AWS_BATCH_WARMUP_EVENT = {
+  "source": "serverless-plugin-warmup"
+};
+
 const AWS_HTTP_EVENT = {
   'resource': '/',
   'path': '/',
@@ -120,6 +124,11 @@ const AWS_HTTP_EVENT = {
 
 describe('HelloWorldModule', () => {
 
+  // afterEach(async (done) => {
+  //   await cachedApp?.close();
+  //   done();
+  // });
+
   describe('Express', () => {
     it('should return "Hello World!"', async (done) => {
       const handler = lambda(HelloWorldModule);
@@ -136,6 +145,21 @@ describe('HelloWorldModule', () => {
   });
 
   describe('Fastify', () => {
+    it('should return "Hello World!" with binaryMimeTypes', async (done) => {
+      const handler = lambda(HelloWorldModule, {
+        engine: 'fastify',
+        fastify: { binaryTypes: ['application/octet-stream'] },
+      });
+      const context = {};
+      const callback = () => {};
+
+      const res = await handler(AWS_HTTP_EVENT, context as any, callback);
+
+      expect(res).toBeDefined();
+      expect(res).toHaveProperty('body', '{"msg":"Hello World!"}');
+      done();
+    });
+
     it('should return "Hello World!"', async (done) => {
       const handler = lambda(HelloWorldModule, { engine: 'fastify' });
       const context = {};
@@ -145,6 +169,20 @@ describe('HelloWorldModule', () => {
 
       expect(res).toBeDefined();
       expect(res).toHaveProperty('body', '{"msg":"Hello World!"}');
+      done();
+    });
+  });
+
+  describe('Warmup Event', () => {
+    it('should return "Lambda is warm!"', async (done) => {
+      const handler = lambda(HelloWorldModule);
+      const context = {};
+      const callback = () => {};
+
+      const res = await handler(AWS_BATCH_WARMUP_EVENT, context as any, callback);
+
+      expect(res).toBeDefined();
+      expect(res).toBe('Lambda is warm!');
       done();
     });
   });

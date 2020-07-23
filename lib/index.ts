@@ -54,20 +54,16 @@ export const lambda = (module: any, options?: Options): Handler => {
 
   let cachedApp: INestApplication;
   return async (event: APIGatewayProxyEvent & SQSEvent & EventBridgeEvent<string, void>, context: Context): Promise<APIGatewayProxyResult | http.Server | ProxyResult | string | undefined> => {
-    try {
-      // Immediate response for WarmUp plugin
-      if (event?.source && event?.source === opts?.warmup?.source) return 'Lambda is warm!';
+    // Immediate response for WarmUp plugin
+    if (event?.source && event?.source === opts?.warmup?.source) return 'Lambda is warm!';
 
-      if (event?.httpMethod) {
-        // App bootstrap
-        if (!cachedApp) {
-          cachedApp = await bootstrap(module, opts);
-        }
-
-        return handleAPIGatewayProxyEvent(cachedApp, event, context, opts);
+    if (event?.httpMethod) {
+      // App bootstrap
+      if (!cachedApp) {
+        cachedApp = await bootstrap(module, opts);
       }
-    } catch (err) {
-      console.error('Couldn\'t start server', err);
+
+      return handleAPIGatewayProxyEvent(cachedApp, event, context, opts);
     }
   };
 };

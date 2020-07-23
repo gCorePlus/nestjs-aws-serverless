@@ -1,3 +1,7 @@
+[![npm version](http://img.shields.io/npm/v/@gcoreplus/nestjs-aws-serverless.svg?style=flat)](https://npmjs.org/package/@gCorePlus/nestjs-aws-serverless "View this project on npm")
+[![Codecov Coverage](https://codecov.io/gh/gCorePlus/nestjs-aws-serverless/branch/master/graph/badge.svg)](https://codecov.io/gh/gCorePlus/nestjs-aws-serverless)
+[![ISC license](http://img.shields.io/badge/license-ISC-brightgreen.svg)](http://opensource.org/licenses/ISC)
+
 # Nestjs AWS Serverless
 
 ## About

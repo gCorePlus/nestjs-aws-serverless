@@ -14,7 +14,7 @@ Install the main lib
 npm install --save @gCorePlus/nestjs-aws-serverless
 ```
 
-Install the libs for your favorite engine express or fastify
+Install the libs for your favorite engine
 
 ##### Express
 

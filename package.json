@@ -35,9 +35,11 @@
   "keywords": [
     "nestjs",
     "node.js",
+    "express",
+    "fastify",
     "aws",
     "lambda",
-    "boot"
+    "serverless"
   ],
   "license": "ISC",
   "dependencies": {

@@ -47,7 +47,7 @@ custom:
 functions:
   hello-world:
     name: ${self:custom.prefix-name}
-    handler: dist/test/nestjs-aws-serverless-express/src/main-aws.handler
+    handler: dist/examples/nestjs-aws-serverless-express/src/main-aws.handler
     timeout: 30
     layers:
       - {Ref: GeneralNodeModulesLambdaLayer}

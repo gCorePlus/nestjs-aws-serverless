@@ -1,6 +1,6 @@
 {
   "name": "@gcoreplus/nestjs-aws-serverless",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Provides default handler for nestjs on lambda",
   "author": "Rennan Stefan Boni",
   "main": "./dist/index.js",
@@ -34,12 +34,14 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "keywords": [
-    "nestjs",
-    "node.js",
+    "aws",
     "express",
     "fastify",
-    "aws",
     "lambda",
+    "nestjs",
+    "node",
+    "node.js",
+    "nodejs",
     "serverless"
   ],
   "license": "ISC",

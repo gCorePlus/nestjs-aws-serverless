@@ -124,11 +124,6 @@ const AWS_HTTP_EVENT = {
 
 describe('HelloWorldModule', () => {
 
-  // afterEach(async (done) => {
-  //   await cachedApp?.close();
-  //   done();
-  // });
-
   describe('Express', () => {
     it('should return "Hello World!"', async (done) => {
       const handler = lambda(HelloWorldModule);

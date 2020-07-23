@@ -1,6 +1,6 @@
 {
   "name": "@gcoreplus/nestjs-aws-serverless",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Provides default handler for nestjs on lambda",
   "author": "Rennan Stefan Boni",
   "main": "./dist/index.js",

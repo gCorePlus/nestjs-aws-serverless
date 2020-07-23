@@ -1,3 +1,7 @@
+[![npm version](http://img.shields.io/npm/v/@gcoreplus/nestjs-aws-serverless.svg?style=flat)](https://npmjs.org/package/@gCorePlus/nestjs-aws-serverless "View this project on npm")
+[![Codecov Coverage](https://codecov.io/gh/gCorePlus/nestjs-aws-serverless/branch/master/graph/badge.svg)](https://codecov.io/gh/gCorePlus/nestjs-aws-serverless)
+[![ISC license](http://img.shields.io/badge/license-ISC-brightgreen.svg)](http://opensource.org/licenses/ISC)
+
 # Nestjs AWS Serverless
 
 ## About
@@ -11,7 +15,7 @@ Inspired by the [aws-serverless-express](https://github.com/awslabs/aws-serverle
 Install the main lib
     
 ```shell script
-npm install --save @gCorePlus/nestjs-aws-serverless
+npm install --save @gcoreplus/nestjs-aws-serverless
 ```
 
 Install the libs for your favorite engine
@@ -32,7 +36,7 @@ npm install --save aws-serverless-express
 
 ### Create the aws handler
 
-Create a file (e.g. `main.aws.ts`) to boot your app on lambda
+Create a file (e.g. `main-aws.ts`) to boot your app on lambda
 
 ##### Express
 
@@ -75,6 +79,10 @@ npm install
 npm run build
 npm run deploy:test:us-east-1
 ```
+
+## Backers
+
+<img src="https://avatars0.githubusercontent.com/u/9962013?v=4" class="avatar" alt="Rennan Stefan Boni" width="50" />
 
 ## License
 

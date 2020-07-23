@@ -1,6 +1,6 @@
 {
   "name": "@gcoreplus/nestjs-aws-serverless",
-  "version": "1.0.6",
+  "version": "1.0.10",
   "description": "Provides default handler for nestjs on lambda",
   "author": "Rennan Stefan Boni",
   "main": "./dist/index.js",
@@ -22,8 +22,9 @@
     }
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"lib/**/*.ts\"",
     "publish:npm": "npm publish --access public",
     "test": "jest",

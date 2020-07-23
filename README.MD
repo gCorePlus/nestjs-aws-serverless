@@ -36,7 +36,7 @@ npm install --save aws-serverless-express
 
 ### Create the aws handler
 
-Create a file (e.g. `main.aws.ts`) to boot your app on lambda
+Create a file (e.g. `main-aws.ts`) to boot your app on lambda
 
 ##### Express
 

@@ -10,6 +10,7 @@
     "README.MD",
     "LICENCE.MD"
   ],
+  "homepage": "https://rennanboni.com/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gCorePlus/nestjs-aws-serverless.git"

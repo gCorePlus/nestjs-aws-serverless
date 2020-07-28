@@ -15,7 +15,7 @@ Inspired by the [aws-serverless-express](https://github.com/awslabs/aws-serverle
 Install the main lib
     
 ```shell script
-npm install --save @gCorePlus/nestjs-aws-serverless
+npm install --save @gcoreplus/nestjs-aws-serverless
 ```
 
 Install the libs for your favorite engine

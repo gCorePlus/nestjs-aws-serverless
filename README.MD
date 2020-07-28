@@ -80,6 +80,10 @@ npm run build
 npm run deploy:test:us-east-1
 ```
 
+## Backers
+
+<img src="https://avatars0.githubusercontent.com/u/9962013?v=4" class="avatar" alt="Rennan Stefan Boni" width="50" />
+
 ## License
 
 Distributed under the ISC License. See `LICENSE` for more information.

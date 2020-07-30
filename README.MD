@@ -30,8 +30,8 @@ npm install --save aws-serverless-express
 ##### Fastify
 
 ```shell script
-npm install --save @nestjs/platform-express
-npm install --save aws-serverless-express
+npm install --save @nestjs/platform-fastify
+npm install --save aws-serverless-fastify
 ``` 
 
 ### Create the aws handler
@@ -70,6 +70,16 @@ functions:
 ...
 ```
 
+### Options
+
+
+| Name                 | Description |
+| :------------------- | ----------- |
+| engine               | Engine name to be use `express` or `fastify`. Default value `express` |
+| warmup.source        | Check for aws event source (`context.source === warmup.source`), if equal it will return string `Lambda is warm!`. See [serverless-plugin-warmup](https://github.com/FidelLimited/serverless-plugin-warmup) |
+| fastify.options      | Fastify options. See [options](https://github.com/fastify/fastify/blob/master/docs/Server.md) |
+| fastify.binaryTypes  | List of binaries for Fastify. See [aws-lambda-fastify](https://github.com/fastify/aws-lambda-fastify) |
+
 ## Examples
 
 Check the examples for express and fastify and deploy using the follow commands
@@ -82,7 +92,9 @@ npm run deploy:test:us-east-1
 
 ## Backers
 
+<a href="https://github.com/rennanboni">
 <img src="https://avatars0.githubusercontent.com/u/9962013?v=4" class="avatar" alt="Rennan Stefan Boni" width="50" />
+</a>
 
 ## License
 

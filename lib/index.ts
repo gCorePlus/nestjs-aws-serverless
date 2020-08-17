@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context, EventBridgeEvent, Handler, SQSEvent } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context, EventBridgeEvent, SQSEvent } from 'aws-lambda';
 import { ProxyResult } from 'aws-serverless-express';
 import { INestApplication } from '@nestjs/common';
 import * as http from 'http';
@@ -46,7 +46,7 @@ const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatew
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const lambda = (module: any, options?: Options): Handler => {
+export const lambda = (module: any, options?: Options): any => {
   const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'} };
   if (opts.fastify) {
     opts.fastify.binaryTypes = opts.fastify.binaryTypes || [];

@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context, EventBridgeEvent, SQSEvent } from 'aws-lambda';
 import { ProxyResult } from 'aws-serverless-express';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, NestApplicationOptions } from '@nestjs/common';
 import * as http from 'http';
 
 export interface Options {
@@ -12,6 +12,7 @@ export interface Options {
     options?: any;
     binaryTypes?: string[];
   },
+  nestOptions: NestApplicationOptions
 }
 
 const bootstrap = async (module: any, opts: Options): Promise<any> => {
@@ -20,7 +21,7 @@ const bootstrap = async (module: any, opts: Options): Promise<any> => {
   if (opts.engine === 'fastify') {
     const { FastifyAdapter } = await import('@nestjs/platform-fastify');
 
-    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options));
+    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options), opts.nestOptions);
     await app.init();
 
     const instance = app.getHttpAdapter().getInstance();
@@ -28,7 +29,7 @@ const bootstrap = async (module: any, opts: Options): Promise<any> => {
 
     return app;
   } else { // Default Express
-    let app = await NestFactory.create<INestApplication>(module);
+    let app = await NestFactory.create<INestApplication>(module, opts.nestOptions);
     await app.init();
 
     return app;
@@ -47,7 +48,7 @@ const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatew
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const lambda = (module: any, options?: Options): any => {
-  const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'} };
+  const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'}, nestOptions: {  } };
   if (opts.fastify) {
     opts.fastify.binaryTypes = opts.fastify.binaryTypes || [];
   }

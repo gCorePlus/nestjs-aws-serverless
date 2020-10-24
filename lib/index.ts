@@ -12,7 +12,7 @@ export interface Options {
     options?: any;
     binaryTypes?: string[];
   },
-  nestOptions: NestApplicationOptions
+  nestOptions?: NestApplicationOptions
 }
 
 const bootstrap = async (module: any, opts: Options): Promise<any> => {

@@ -12,7 +12,11 @@ export interface Options {
     options?: any;
     binaryTypes?: string[];
   },
-  nestOptions?: NestApplicationOptions
+  nestjs?: {
+    options?: NestApplicationOptions,
+    onBeforeInit?: (app: INestApplication) => void,
+    onAfterInit?: (app: INestApplication) => void
+  }
 }
 
 const bootstrap = async (module: any, opts: Options): Promise<any> => {
@@ -21,7 +25,7 @@ const bootstrap = async (module: any, opts: Options): Promise<any> => {
   if (opts.engine === 'fastify') {
     const { FastifyAdapter } = await import('@nestjs/platform-fastify');
 
-    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options), opts.nestOptions);
+    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options), opts.nestjs?.options);
     await app.init();
 
     const instance = app.getHttpAdapter().getInstance();
@@ -29,11 +33,12 @@ const bootstrap = async (module: any, opts: Options): Promise<any> => {
 
     return app;
   } else { // Default Express
-    let app = await NestFactory.create<INestApplication>(module, opts.nestOptions);
+    let app = await NestFactory.create<INestApplication>(module, opts.nestjs?.options);
     await app.init();
 
     return app;
   }
+
 };
 
 const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatewayProxyEvent, context: Context, opts: Options): Promise<APIGatewayProxyResult | http.Server | ProxyResult> => {
@@ -48,9 +53,12 @@ const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatew
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const lambda = (module: any, options?: Options): any => {
-  const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'}, nestOptions: {  } };
+  const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'}, nestjs: {} };
   if (opts.fastify) {
     opts.fastify.binaryTypes = opts.fastify.binaryTypes || [];
+  }
+  if(!opts.nestjs) {
+    opts.nestjs = {};
   }
 
   let cachedApp: INestApplication;

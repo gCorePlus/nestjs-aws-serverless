@@ -99,6 +99,10 @@ npm run deploy:test:us-east-1
 <img src="https://avatars0.githubusercontent.com/u/9962013?v=4" class="avatar" alt="Rennan Stefan Boni" width="50" />
 </a>
 
+<a href="https://github.com/shoxsz">
+<img src="https://avatars0.githubusercontent.com/u/8078131?v=4" class="avatar" alt="Paulo Márcio" width="50" />
+</a>
+
 ## License
 
 Distributed under the ISC License. See `LICENSE` for more information.

@@ -19,25 +19,41 @@ export interface Options {
   }
 }
 
-const bootstrap = async (module: any, opts: Options): Promise<any> => {
+const create = async (module: any, opts: Options) => {
   const { NestFactory } = await import('@nestjs/core');
 
-  if (opts.engine === 'fastify') {
+  if(opts.engine == 'fastify') {
     const { FastifyAdapter } = await import('@nestjs/platform-fastify');
+    return NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options), opts.nestjs?.options);
+  }
+  
+  return await NestFactory.create<INestApplication>(module, opts.nestjs?.options);
+}
 
-    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options), opts.nestjs?.options);
-    await app.init();
+const init = async (app: INestApplication, opts: Options) => {
+  if(opts.nestjs?.onBeforeInit) {
+    opts.nestjs.onBeforeInit(app);
+  }
 
+  await app.init();
+
+  if(opts.engine == 'fastify') {
     const instance = app.getHttpAdapter().getInstance();
     await instance.ready();
-
-    return app;
-  } else { // Default Express
-    let app = await NestFactory.create<INestApplication>(module, opts.nestjs?.options);
-    await app.init();
-
-    return app;
   }
+
+  if(opts.nestjs?.onAfterInit) {
+    opts.nestjs.onAfterInit(app);
+  }
+
+}
+
+const bootstrap = async (module: any, opts: Options): Promise<any> => {
+  
+  const app = await create(module, opts);
+  await init(app, opts);
+
+  return app;
 
 };
 

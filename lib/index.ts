@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context, EventBridgeEvent, SQSEvent } from 'aws-lambda';
 import { ProxyResult } from 'aws-serverless-express';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, NestApplicationOptions } from '@nestjs/common';
 import * as http from 'http';
 
 export interface Options {
@@ -12,27 +12,49 @@ export interface Options {
     options?: any;
     binaryTypes?: string[];
   },
+  nestjs?: {
+    options?: NestApplicationOptions,
+    onBeforeInit?: (app: INestApplication) => void,
+    onAfterInit?: (app: INestApplication) => void
+  }
+}
+
+const create = async (module: any, opts: Options) => {
+  const { NestFactory } = await import('@nestjs/core');
+
+  if(opts.engine == 'fastify') {
+    const { FastifyAdapter } = await import('@nestjs/platform-fastify');
+    return NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options), opts.nestjs?.options);
+  }
+  
+  return await NestFactory.create<INestApplication>(module, opts.nestjs?.options);
+}
+
+const init = async (app: INestApplication, opts: Options) => {
+  if(opts.nestjs?.onBeforeInit) {
+    opts.nestjs.onBeforeInit(app);
+  }
+
+  await app.init();
+
+  if(opts.engine == 'fastify') {
+    const instance = app.getHttpAdapter().getInstance();
+    await instance.ready();
+  }
+
+  if(opts.nestjs?.onAfterInit) {
+    opts.nestjs.onAfterInit(app);
+  }
+
 }
 
 const bootstrap = async (module: any, opts: Options): Promise<any> => {
-  const { NestFactory } = await import('@nestjs/core');
+  
+  const app = await create(module, opts);
+  await init(app, opts);
 
-  if (opts.engine === 'fastify') {
-    const { FastifyAdapter } = await import('@nestjs/platform-fastify');
+  return app;
 
-    let app = await NestFactory.create<INestApplication>(module, new FastifyAdapter(opts.fastify?.options));
-    await app.init();
-
-    const instance = app.getHttpAdapter().getInstance();
-    await instance.ready();
-
-    return app;
-  } else { // Default Express
-    let app = await NestFactory.create<INestApplication>(module);
-    await app.init();
-
-    return app;
-  }
 };
 
 const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatewayProxyEvent, context: Context, opts: Options): Promise<APIGatewayProxyResult | http.Server | ProxyResult> => {
@@ -47,9 +69,12 @@ const handleAPIGatewayProxyEvent = async (app: INestApplication, event: APIGatew
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const lambda = (module: any, options?: Options): any => {
-  const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'} };
+  const opts: Options = options ? options : { engine: 'express', warmup: { source: 'serverless-plugin-warmup'}, nestjs: {} };
   if (opts.fastify) {
     opts.fastify.binaryTypes = opts.fastify.binaryTypes || [];
+  }
+  if(!opts.nestjs) {
+    opts.nestjs = {};
   }
 
   let cachedApp: INestApplication;

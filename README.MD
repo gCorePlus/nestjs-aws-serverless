@@ -79,6 +79,9 @@ functions:
 | warmup.source        | Check for aws event source (`context.source === warmup.source`), if equal it will return string `Lambda is warm!`. See [serverless-plugin-warmup](https://github.com/FidelLimited/serverless-plugin-warmup) |
 | fastify.options      | Fastify options. See [options](https://github.com/fastify/fastify/blob/master/docs/Server.md) |
 | fastify.binaryTypes  | List of binaries for Fastify. See [aws-lambda-fastify](https://github.com/fastify/aws-lambda-fastify) |
+| nestjs.options      | NestJs application options. See [NestApplicationOptions](https://github.com/nestjs/nest/blob/master/packages/common/interfaces/nest-application-options.interface.ts) |
+| nestjs.onBeforeInit  | Function called before the `app.init()` is invoked |
+| nestjs.onAfterInit  | Function called after the `app.init()` is invoked |
 
 ## Examples
 

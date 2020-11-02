@@ -1,4 +1,5 @@
-import { Controller, Get, Module } from '@nestjs/common';
+import { Controller, Get, INestApplication, Module } from '@nestjs/common';
+import { executionAsyncId } from 'async_hooks';
 import { lambda } from './index';
 
 @Controller()
@@ -178,6 +179,39 @@ describe('HelloWorldModule', () => {
 
       expect(res).toBeDefined();
       expect(res).toBe('Lambda is warm!');
+      done();
+    });
+  });
+
+  describe('onBeforeInit & onAfterInit', () => {
+    it('should set before and after variables!"', async (done) => {
+
+      let opt = 1;
+
+      const nestjs = {
+        onBeforeInit: (app: INestApplication) => {
+          opt++;
+          app.enableCors({
+            origin: "localhost"
+          });
+        },
+        onAfterInit: (app: INestApplication) => {
+          if(opt != 2) {
+            throw new Error("onBeforeInit not called");
+          }
+        }
+      }
+
+      const handler = lambda(HelloWorldModule, { engine: 'express', nestjs });
+      const context = {};
+      const callback = () => {};
+
+      const res = await handler(AWS_HTTP_EVENT, context as any, callback);
+
+      expect(res).toBeDefined();
+      expect(res).toHaveProperty('body', '{"msg":"Hello World!"}');
+      expect(res).toHaveProperty('headers.access-control-allow-origin', 'localhost');
+
       done();
     });
   });

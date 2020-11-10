@@ -1,4 +1,4 @@
 import { lambda } from '../../../lib';
 import { AppModule } from './app.module';
 
-export const handler = lambda(AppModule);
+export const handler = lambda(AppModule, { engine: 'express', nestjs: { options: { cors: true } } });
